@@ -15,8 +15,8 @@ destring Churn , replace
 destring TotalCharges , replace
 
 gen weight = .
-replace weight = 3.7 if Churn == 1   // 正类：续保
-replace weight = 1.4 if Churn == 0   // 负类：不续保
+replace weight = 6 if Churn == 1   // 正类：续保
+replace weight = 1 if Churn == 0   // 负类：不续保
 
 gen flag_extreme = 0
 
