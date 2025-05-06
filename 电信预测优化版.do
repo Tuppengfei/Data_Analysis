@@ -40,8 +40,12 @@ display "删除类别0的极端值数量：" r(N)
 drop if flag_extreme==1
 
 
+<<<<<<< HEAD:电信预测优化版.do
 
 logit Churn i.n_gender i.n_Partner i.n_Dependents i.n_PhoneService i.n_MultipleLines i.n_InternetService i.n_OnlineSecurity i.n_OnlineBackup i.n_DeviceProtection i.n_TechSupport i.n_StreamingTV i.n_StreamingMovies i.n_Contract i.n_PaperlessBilling i.n_PaymentMethod MonthlyCharges TotalCharges [pweight=weight]
+=======
+logit Churn i.n_gender i.n_Partner i.n_Dependents i.n_PhoneService i.n_MultipleLines i.n_InternetService i.n_OnlineSecurity i.n_OnlineBackup i.n_DeviceProtection i.n_TechSupport i.n_StreamingTV i.n_StreamingMovies i.n_Contract i.n_PaperlessBilling i.n_PaymentMethod MonthlyCharges TotalCharges//[pweight=weight]
+>>>>>>> 3bcbd3f05c0db83ed66b161aef63b217d6e30561:电信预测.do
 predict phat
 roctab Churn phat
 //lroc
