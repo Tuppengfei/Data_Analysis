@@ -5,6 +5,10 @@ Services that each customer has signed up for – phone, multiple lines, interne
 Customer account information – how long they’ve been a customer, contract, payment method, paperless billing, monthly charges, and total charges
 Demographic info about customers – gender, age range, and if they have partners and dependents
 
+根据客户信息预测客户的流失情况，为了达到最大利益，我们着重强调召回率
+我们在stata上建立逻辑回归模型，得到的模型召回率为0.85
+在python上建立的决策树模型，得到的模型召回率为0.95
 
-根据这些建立logit回归模型，auc=0.83
-再根据续约的客户盈利100元，而预测续约实际没有续约的客户会导致公司损失20元，结合预测结果确定阈值以获得最大利润。
+综合评价
+逻辑回归：权重调整后的模型召回率达到 0.85，解释性强，便于业务理解和实际应用，过拟合风险低。
+决策树：召回率 0.95，AUC 显著高于逻辑回归，但解释性较差，模型复杂度较高。
