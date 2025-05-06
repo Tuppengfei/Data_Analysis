@@ -20,7 +20,7 @@ destring TotalCharges , replace
 //replace weight = 1.4 if Churn == 0   // 负类：不续保
 
 
-logit Churn i.n_gender i.n_Partner i.n_Dependents i.n_PhoneService i.n_MultipleLines i.n_InternetService i.n_OnlineSecurity i.n_OnlineBackup i.n_DeviceProtection i.n_TechSupport i.n_StreamingTV i.n_StreamingMovies i.n_Contract i.n_PaperlessBilling i.n_PaymentMethod //[pweight=weight]
+logit Churn i.n_gender i.n_Partner i.n_Dependents i.n_PhoneService i.n_MultipleLines i.n_InternetService i.n_OnlineSecurity i.n_OnlineBackup i.n_DeviceProtection i.n_TechSupport i.n_StreamingTV i.n_StreamingMovies i.n_Contract i.n_PaperlessBilling i.n_PaymentMethod MonthlyCharges TotalCharges//[pweight=weight]
 predict phat
 //roctab Churn phat
 lroc
