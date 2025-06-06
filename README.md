@@ -11,3 +11,4 @@ Demographic info about customers – gender, age range, and if they have partner
 逻辑回归：权重调整后的模型召回率达到 0.85，解释性强，便于业务理解和实际应用，过拟合风险低。
 决策树：召回率 0.95，AUC 显著高于逻辑回归，但解释性较差，模型复杂度较高。
 再调整数据的正负类数量一致进行逻辑回归，得到的召回率为0.77
+基于K-means采样的逻辑回归的召回率为83%。预测流失客户的效果较好。
