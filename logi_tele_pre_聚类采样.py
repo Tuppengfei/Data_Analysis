@@ -7,23 +7,23 @@ from sklearn.metrics import confusion_matrix, roc_curve, roc_auc_score, accuracy
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 
-# 设置matplotlib正常显示中文和负号
+
 plt.rcParams['font.sans-serif'] = ['SimHei']
 plt.rcParams['axes.unicode_minus'] = False
 
-# 1. 加载数据
+
 try:
     df = pd.read_excel(r"C:\Users\31498\OneDrive\Desktop\WA_Fn-UseC_-Telco-Customer-Churn.xlsx")
     print("数据加载成功。")
 except FileNotFoundError:
     print("错误：无法找到指定路径的文件，请检查文件路径是否正确。")
-    exit() # 如果文件不存在，则退出程序
+    exit() 
 
-# 2. 初始数据预处理
-# 删除ID列
+
+
 df.drop('customerID', axis=1, inplace=True)
 
-# 转换目标变量
+
 df['Churn'] = df['Churn'].replace({'No': 0, 'Yes': 1})
 
 # 处理数值类型列中的错误和缺失值
@@ -32,7 +32,7 @@ df['MonthlyCharges'] = pd.to_numeric(df['MonthlyCharges'], errors='coerce')
 df['TotalCharges'].fillna(df['TotalCharges'].median(), inplace=True)
 df['MonthlyCharges'].fillna(df['MonthlyCharges'].median(), inplace=True)
 
-# 定义分类变量列表，确保它们是字符串类型以便后续处理
+# 定义分类变量列表
 char_vars = ['gender', 'Partner', 'Dependents', 'PhoneService', 
              'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 
              'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 
@@ -43,18 +43,17 @@ for var in char_vars:
     
 print("初始数据预处理完成。")
 
-# 3. 划分训练集与测试集
-# 这是保证模型评估可靠性的关键一步，使用分层抽样确保训练集和测试集中流失比例相似
+# 划分训练集与测试集
 train_df, test_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df['Churn'])
 print(f"数据已划分为训练集（{len(train_df)}条）和测试集（{len(test_df)}条）。")
 
 
-# 4. 进一步数据处理（在划分后进行）
+# 进一步数据处理
 # 定义处理极端值的函数（3σ原则 + 线性插值）
 def clean_outliers(data, column):
     mean = data[column].mean()
     std = data[column].std()
-    # 识别超出3个标准差的值
+    
     is_outlier = ~((data[column] >= mean - 3*std) & (data[column] <= mean + 3*std))
     # 将极端值设为NaN，然后用线性插值填充
     data.loc[is_outlier, column] = np.nan
@@ -76,7 +75,6 @@ majority = train_df[train_df['Churn'] == 0].copy()
 # 定义用于聚类的数值特征
 features_for_clustering = ['MonthlyCharges', 'TotalCharges']
 
-# 设定聚类数量k等于少数类的样本数
 k = len(minority)
 kmeans = KMeans(n_clusters=k, random_state=42, n_init=10) # n_init=10 避免局部最优
 
@@ -87,7 +85,7 @@ majority['cluster'] = kmeans.fit_predict(majority[features_for_clustering])
 centroid_rows = []
 for i in range(k):
     group = majority[majority['cluster'] == i]
-    # 如果某个簇为空，则跳过
+  
     if len(group) == 0:
         continue
         
@@ -95,7 +93,7 @@ for i in range(k):
     row = dict(zip(features_for_clustering, kmeans.cluster_centers_[i]))
     # 设定目标变量为0（多数类）
     row['Churn'] = 0
-    # 为分类变量找到该簇中最常见的值（众数）
+    # 为分类变量找到该簇中的众数
     for var in char_vars:
         row[var] = group[var].mode()[0]
         
@@ -124,7 +122,7 @@ print("\n--- 在测试集上进行评估 ---")
 test_df['phat'] = results.predict(test_df)
 
 # 根据阈值进行分类（0.3是一个可调整的参数，旨在提高召回率）
-threshold = 0.3
+threshold = 0.5
 test_df['phat_class'] = (test_df['phat'] > threshold).astype(int)
 
 # 计算各项评估指标
@@ -133,7 +131,7 @@ auc = roc_auc_score(test_df['Churn'], test_df['phat'])
 acc = accuracy_score(test_df['Churn'], test_df['phat_class'])
 recall = recall_score(test_df['Churn'], test_df['phat_class'])
 
-# 8. 展示评估结果
+
 print("\n混淆矩阵 (测试集):")
 cm = confusion_matrix(test_df['Churn'], test_df['phat_class'])
 print(cm)
@@ -141,7 +139,7 @@ print(f"\n准确率 (Accuracy): {acc:.3f}")
 print(f"召回率 (Recall): {recall:.3f}")
 print(f"AUC 值: {auc:.3f}")
 
-# 9. 结果可视化
+
 # 绘制混淆矩阵图
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[0, 1])
 disp.plot(cmap='Blues')
