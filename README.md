@@ -5,7 +5,7 @@ Customer account information – how long they’ve been a customer, contract, p
 Demographic info about customers – gender, age range, and if they have partners and dependents
 
 根据客户信息预测客户的流失情况，为了实现利润最大化，我们着重提升模型的召回率
-逻辑回归模型得到的模型召回率为0.85；决策树模型得到的模型召回率为0.95
+逻辑回归模型得到的模型召回率为0.85；
 调整正负类数量的逻辑回归的召回率为0.77.
 综合评价：
 逻辑回归：权重调整后的模型召回率达到 0.85，解释性强，便于业务理解和实际应用，过拟合风险低。
